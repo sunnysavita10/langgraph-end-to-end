@@ -1,5 +1,5 @@
 import streamlit as st
-from transformers import pipeline
+from langchain_core.messages import HumanMessage
 from bot import chatbot
 
 mybot=chatbot()
@@ -11,11 +11,11 @@ st.write("Ask any question, and I'll try to answer it!")
 
 # Input text box for the question
 question = st.text_input("Enter your question here:")
-input={"messages": [question]}
 
 # Button to get the answer
 if st.button("Get Answer"):
-    if input:
+    if question:
+        input={"messages": [HumanMessage(content=question)]}
         response=workflow.invoke(input)
         st.write("**Answer:**", response['messages'][-1].content)
     else:

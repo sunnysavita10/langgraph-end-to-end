@@ -14,8 +14,6 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 class chatbot:
     def __init__(self):
         self.llm=ChatGroq(model_name="Gemma2-9b-It")
-        
-    def call_tool(self):
         tool = TavilySearchResults(max_results=2)
         tools = [tool]
         self.tool_node = ToolNode(tools=[tool])
@@ -36,7 +34,6 @@ class chatbot:
     
                 
     def __call__(self):
-        self.call_tool()
         workflow = StateGraph(MessagesState)
         workflow.add_node("agent", self.call_model)
         workflow.add_node("tools", self.tool_node)
@@ -49,7 +46,7 @@ class chatbot:
 if __name__=="__main__":
     mybot=chatbot()
     workflow=mybot()
-    response=workflow.invoke({"messages": ["who is a current prime minister of USA?"]})
+    response=workflow.invoke({"messages": [HumanMessage(content="who is a current prime minister of USA?")]})
     print(response['messages'][-1].content)
     
     
